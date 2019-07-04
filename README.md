@@ -86,3 +86,91 @@ docker build -t go-docker:latest .
 
 ###### RUN the docker :
 docker run --rm -e SERVE_PORT=8082 -it  -p 80:8082 go-docker:latest
+
+
+#############################################################
+# Technical specification
+## API Methods: 
+
+| Name        | Method      | URL                                                  |
+| ---         | ---         | ---                                                  |
+| List        | `GET`       | `/configs`                                           |
+| Create      | `POST`      | `/configs`                                           |
+| Get         | `GET`       | `/configs/{name}`                                    |
+| Update      | `PUT/PATCH` | `/configs/{name}`                                    |
+| Delete      | `DELETE`    | `/configs/{name}`                                    |
+| Query       | `GET`       | `/search?name={config_name}&data.{key}={value}`      |
+| HealthCheck | `GET`       | `/healthcheck`                                       |
+
+
+### Request 1: | List   | `GET` | `/configs`
+curl http://localhost:3000/configs
+
+#### Expected Output:
+
+[{"name":"config1","data":{"key":"val1","id":1}},{"name":"config2","data":{"key":"val2","id":2}}]
+
+### Request 2: | Create | `POST` | `/configs`
+curl -X POST -d '{"name":"config1", "data": {"key": "val1", "id": 1} }' -H "Content-Type: application/json" http://localhost:3000/configs
+
+#### Expected Output:
+
+{"name":"config1","data":{"key":"val1","id":1}}
+
+### Request 3: | Get    | `GET` | `/configs/{name}`
+curl http://localhost:3000/configs/config2
+
+#### Expected Output:
+
+{"name":"config2","data":{"key":"val2","id":2}}
+
+### Request 4: | Delete | `DELETE` | `/configs/{name}`
+curl  -X DELETE http://localhost:3000/configs/config2
+
+### Request 5: | Query  | `GET`  | `/search?name={config_name}&data.{key}={value}`
+curl http://localhost:3000/search\?name\=config1\&data.id\=1
+
+#### Expected Output:
+
+{"name":"config1","data":{"key":"val1","id":1}}
+
+### Request 6: | HealthCheck  | `GET`  | `/healthcheck`
+curl http://localhost:3000/healthcheck
+
+#### Expected Output:
+
+Application is up and running
+
+### Unit Test cases
+
+assignment_test.go file contains the unit test cases implementation  for above REST APIs
+ 
+To run the test cases run the "go test -v" , results will be displayed on the console
+#### Expected Output: 
+
+=== RUN   TestHealthcheckEndpoint
+
+--- PASS: TestHealthcheckEndpoint (0.00s)
+
+=== RUN   TestListConfigsEndpoint
+
+--- PASS: TestListConfigsEndpoint (0.00s)
+
+=== RUN   TestGetConfigEndpoint
+
+--- PASS: TestGetConfigEndpoint (0.00s)
+
+=== RUN   TestCreateConfigEndpoint
+
+--- PASS: TestCreateConfigEndpoint (0.00s)
+
+=== RUN   TestDeleteConfigEndpoint
+
+--- PASS: TestDeleteConfigEndpoint (0.00s)
+
+=== RUN   TestSearchConfigEndpoint
+
+--- PASS: TestSearchConfigEndpoint (0.00s)
+
+PASS
+
