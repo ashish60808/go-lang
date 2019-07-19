@@ -5,7 +5,6 @@ The goal of this test is to assert (to some degree) your coding, testing, automa
 The aim of test is to create a simple HTTP service that stores and returns configurations that satisfy certain conditions.
 Since we love automating things, the service should be automatically deployed to kubernetes.
 
-_Note: While we love open source here at HelloFresh, please do not create a public repo with your test in! This challenge is only shared with people interviewing, and for obvious reasons we'd like it to remain this way._
 
 ## Instructions
 
